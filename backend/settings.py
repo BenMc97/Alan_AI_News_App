@@ -1,5 +1,8 @@
 from pathlib import Path
 import os
+import django_heroku
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +17,7 @@ SECRET_KEY = '@(z+vxq=bw-!#=0z+@_sp7$jthwrqg_^o*$v=ilcce@c+m30&&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'myshop-project.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -29,7 +32,6 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'corsheaders',
-    'storages',
 
     'base.apps.BaseConfig',
 ]
@@ -111,24 +113,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myshop',
-        'USER': 'BenMc97',
-        'PASSWORD': 'Sandybeauty1997!',
-        'HOST': 'myshop-identifier.coomlwpbmkyj.eu-west-2.rds.amazonaws.com',
-        'PORT': '5432',
-    }
-}
+
 
 
 
@@ -176,19 +168,17 @@ STATICFILES_DIRS = [
     BASE_DIR / 'frontend/build/static'
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_ROOT = BASE_DIR / 'static/images'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-AWS_QUERYSTRING_AUTH = False
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_ACCESS_KEY_ID = 'AKIARWRRGVTBGOFJD557'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'myshop-bucket-demo'
-
+django_heroku.settings(locals())
 
 if os.getcwd() == '/app':
     DEBUG = False
+
+
